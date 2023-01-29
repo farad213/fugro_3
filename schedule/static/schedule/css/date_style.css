@@ -20,8 +20,9 @@ body{
 
 .project{
     background: linear-gradient(rgba(60,60,60,0.8), rgba(60,60,60,0.8));
-    margin: 20px;
+    margin: 50px;
     height: fit-content;
+    max-width: 500px;
 }
 
 .project_title{
@@ -56,18 +57,28 @@ textarea{
 .projects{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 
 #id_vehicle{
     display: flex;
-    margin: 5px;
+    margin: 10px;
+    flex-wrap: wrap;
+}
+
+#id_vehicle div{
+    padding: 2px;
 }
 
 #id_employee{
     display: flex;
     margin: 5px;
+    flex-wrap: wrap;
+}
+
+#id_employee div{
+    padding: 2px;
 }
 
 .select2{
@@ -154,4 +165,31 @@ table, th, td{
 
 #done_show{
     visibility: hidden;
+}
+
+input[type="date"]{
+    font-size: 1.1rem;
+    margin: 5px;
+    padding: 2px;
+}
+
+.cyan-button{
+    background-color: rgba(10,70,60,0.8);
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-decoration: none;
+    margin: 4px;
+    cursor: pointer;
+}
+
+.cyan-button:hover{
+    background-color: rgba(10,70,60,1);
+}
+
+.cyan-button:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 0 5px #ccc;
 }

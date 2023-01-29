@@ -35,6 +35,14 @@ Fugro - Beosztás - Dátum
     <div class="saved_project project">
         <div class="form_table_wrapper">
         <div class="project_title"><span>{{ project.project.project }}</span></div>
+            <form class="re_date" action="{% url 're_date_project' %}">
+                <input type="hidden" name="project_id" value="{{project.id}}">
+                <input type="hidden" name="year" value="{{ year_ }}">
+                <input type="hidden" name="month" value="{{ month_ }}">
+                <input type="hidden" name="day" value="{{ day_ }}">
+                <input type="date" name="new_date">
+                <button type="submit" class="cyan-button">Átdátumoz</button>
+            </form>
         <form method="POST" class="project_form js_form" data-hasSubproject="{{project.project.hasSubproject}}" data-artifacts-url="{% url 'ajax_artifacts' %}" data-profiles-url="{% url 'ajax_profiles' %}" data-partial_save-url="{% url 'ajax_partial_save' %}">
             {% csrf_token %}
             <input type="hidden" name="saved">
@@ -50,9 +58,9 @@ Fugro - Beosztás - Dátum
                 <div class="field">{{ project_form.profile|add_class:"select2" }}</div>
             {% endif %}
             <div class="label">{{ project_form.employee.label }}</div>
-            <div class="field">{{ project_form.employee }}</div>
+            <div class="field employee-field">{{ project_form.employee }}</div>
             <div class="label">{{ project_form.vehicle.label }}</div>
-            <div class="field">{{ project_form.vehicle }}</div>
+            <div class="field vehicle-field">{{ project_form.vehicle }}</div>
             <div class="label">{{ project_form.comment.label }}</div>
             <div class="field">{{ project_form.comment }}</div>
 
@@ -97,9 +105,9 @@ Fugro - Beosztás - Dátum
                     <div class="field">{{ date_bound_project_form.profile|add_class:"select2" }}</div>
                 {% endif %}
                 <div class="label">{{ date_bound_project_form.employee.label }}</div>
-                <div class="field">{{ date_bound_project_form.employee }}</div>
+                <div class="field employee-field">{{ date_bound_project_form.employee }}</div>
                 <div class="label">{{ date_bound_project_form.vehicle.label }}</div>
-                <div class="field">{{ date_bound_project_form.vehicle }}</div>
+                <div class="field vehicle-field">{{ date_bound_project_form.vehicle }}</div>
                 <div class="label">{{ date_bound_project_form.comment.label }}</div>
                 <div class="field">{{ date_bound_project_form.comment }}</div>
 

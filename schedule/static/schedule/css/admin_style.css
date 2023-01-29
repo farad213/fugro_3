@@ -1,4 +1,3 @@
-
 body{
     margin: 0;
     padding: 0;
@@ -24,17 +23,18 @@ body{
     flex-direction: column;
     background: linear-gradient(rgba(60,60,60,0.6), rgba(60,60,60,0.6));
     padding: 20px;
+    margin-bottom: 50px;
     align-items: center;
+    width: min(90%, 1400px);
 }
 
 .week{
     display: flex;
-    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .day{
-    margin: 10px;
-    width: max(170px, 11vw);
     height: 100px;
     border-radius: 3px;
 }
@@ -42,9 +42,40 @@ body{
 .current_month{
     background: linear-gradient(rgba(160,60,60,0.8), rgba(60,60,60,0.8));
 }
+.current_month:hover{
+    background: linear-gradient(rgba(190,60,60,1), rgba(60,60,60,0.8));
+}
+
 
 .not_current_month{
     background: linear-gradient(rgba(60,60,60,0.8), rgba(60,60,60,0.8));
+}
+.not_current_month:hover{
+    background: linear-gradient(rgba(30,30,30,1), rgba(60,60,60,0.8));
+}
+
+
+#today{
+    background: linear-gradient(rgba(10,50,60,0.8), rgba(60,60,60,0.8));
+}
+#today:hover{
+    background: linear-gradient(rgba(10,90,60,1), rgba(60,60,60,0.8));
+}
+
+
+.Szombat, .Vasárnap{
+    background: linear-gradient(rgba(60,60,60,0.8), rgba(60,60,60,0.8));
+}
+.Szombat:hover, .Vasárnap:hover{
+    background: linear-gradient(rgba(30,30,30,1), rgba(60,60,60,0.8));
+}
+
+
+.done{
+    background: linear-gradient(rgba(60,160,60,0.8), rgba(60,60,60,0.8));
+}
+.done:hover{
+    background: linear-gradient(rgba(60,190,60,1), rgba(60,60,60,0.8));
 }
 
 .text{
@@ -56,6 +87,10 @@ body{
     height: 90%;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.day_wrap{
+    flex: 1;
 }
 
 a{
@@ -77,19 +112,6 @@ a{
     width: 100%;
 }
 
-
-.Szombat, .Vasárnap{
-    background: linear-gradient(rgba(60,60,60,0.8), rgba(60,60,60,0.8));
-}
-
-.draft{
-    background: linear-gradient(rgba(160,160,60,0.8), rgba(60,60,60,0.8));
-}
-
-.done{
-    background: linear-gradient(rgba(60,160,60,0.8), rgba(60,60,60,0.8));
-}
-
 .date_title_wrapper{
     display: flex;
     justify-content: center;
@@ -101,6 +123,34 @@ a{
     background: linear-gradient(rgba(60,60,60,0.6), rgba(60,60,60,0.6));
     width: fit-content;
     padding: 10px;
+    margin-bottom: 0px;
+}
+
+.cyan-button{
+    background-color: rgba(10,70,60,0.8);
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.cyan-button:hover{
+    background-color: rgba(10,70,60,1);
+}
+
+.cyan-button:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 0 5px #ccc;
+}
+
+.toggle-days-displayed{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
 }
 
 .weekdays{
@@ -111,85 +161,66 @@ a{
 
 .weekdays div{
     background: linear-gradient(rgba(30,30,30,0.8), rgba(30,30,30,0.8));
-    margin: 10px;
-    padding: 10px 0px 10px 0px;
-    width: max(170px, 11vw);
+    margin: 0px 10px 0px 10px;
+    flex: 1;
     border-radius: 3px;
 }
 
 .weekdays div span{
     margin: 10px;
     font-size: 22px;
+    width: 100%;
+    display: block;
+}
+
+.probaterheles.false, .inklinometer.false, .integritasvizsgalat.false, .sullyedesmeres.false, .other.false, .probaterheles.true, .inklinometer.true, .integritasvizsgalat.true, .sullyedesmeres.true, .other.true{
+    width: 20%;
+    height: 20px;
+    background-size: contain;
 }
 
 .probaterheles.false{
     background-image:  url(../images/probaterheles.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .inklinometer.false{
     background-image:  url(../images/inklinometer.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .integritasvizsgalat.false{
     background-image:  url(../images/integritasvizsgalat.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .sullyedesmeres.false{
     background-image:  url(../images/sullyedesmeres.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .other.false{
     background-image:  url(../images/other.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .probaterheles.true{
     background-image:  url(../images/probaterheles_green.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .inklinometer.true{
     background-image:  url(../images/inklinometer_green.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .integritasvizsgalat.true{
     background-image:  url(../images/integritasvizsgalat_green.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .sullyedesmeres.true{
     background-image:  url(../images/sullyedesmeres_green.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
 }
 
 .other.true{
     background-image:  url(../images/other_green.png);
-    width: 20px;
-    height: 20px;
-    background-size: contain;
+}
+
+.probaterheles, .inklinometer, .integritasvizsgalat, .sullyedesmeres, .other{
+    background-repeat: no-repeat;
 }
 
 .icons{
@@ -212,3 +243,20 @@ a{
   z-index: 999;
 }
 
+.weekend, .Szombat-display, .Vasárnap-display{
+    display: none;
+}
+
+.day_wrap, .weekdays div{
+    margin: 10px 20px 10px 20px;
+}
+
+input[type="date"]{
+    font-size: 1.1rem;
+    margin: 0.7rem 0.3rem 0.3rem 0.3rem;
+}
+
+.export_wrapper div{
+    display: flex;
+    justify-content: center;
+}

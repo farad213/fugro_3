@@ -1,4 +1,3 @@
-
 body{
     margin: 0;
     padding: 0;
@@ -17,25 +16,24 @@ body{
 .calendar{
     display: flex;
     justify-content: space-around;
+    margin-top: 50px;
 }
 
 .month{
     display: flex;
     flex-direction: column;
     background: linear-gradient(rgba(60,60,60,0.6), rgba(60,60,60,0.6));
-    margin: 70px;
     padding: 20px;
     align-items: center;
+    width: min(90%, 1400px);
 }
 
 .week{
     display: flex;
-    flex-wrap: wrap;
+    width: 100%;
 }
 
 .day{
-    margin: 10px;
-    width: max(170px, 11vw);
     height: 100px;
     border-radius: 3px;
 }
@@ -43,20 +41,99 @@ body{
 .current_month{
     background: linear-gradient(rgba(160,60,60,0.8), rgba(60,60,60,0.8));
 }
+.current_month:hover{
+    background: linear-gradient(rgba(190,60,60,1), rgba(60,60,60,0.8));
+}
+
 
 .not_current_month{
     background: linear-gradient(rgba(60,60,60,0.8), rgba(60,60,60,0.8));
 }
+.not_current_month:hover{
+    background: linear-gradient(rgba(30,30,30,1), rgba(60,60,60,0.8));
+}
+
+
 
 .active{
     background: linear-gradient(rgba(60,160,60,0.8), rgba(60,60,60,0.8));
 }
+.active:hover{
+    background: linear-gradient(rgba(60,190,60,1), rgba(60,60,60,0.8));
+}
+
+
+
+#today{
+    background: linear-gradient(rgba(10,50,60,0.8), rgba(60,60,60,0.8));
+}
+#today:hover{
+    background: linear-gradient(rgba(10,90,60,1), rgba(60,60,60,0.8));
+}
+
+
+.Szombat, .Vasárnap{
+    background: linear-gradient(rgba(60,60,60,0.8), rgba(60,60,60,0.8));
+}
+.Szombat:hover, .Vasárnap:hover{
+    background: linear-gradient(rgba(30,30,30,1), rgba(60,60,60,0.8));
+}
 
 .text{
-    margin: 5px;
+    margin: 10px;
     color: white;
     text-decoration: none;
+    font-size: 22px;
+    display: flex;
+    height: 90%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.date_title_wrapper{
+    display: flex;
+    justify-content: center;
+}
+
+.date_title{
+    font-size: 35px;
+    font-weight: 700;
+    background: linear-gradient(rgba(60,60,60,0.6), rgba(60,60,60,0.6));
+    width: fit-content;
+    padding: 10px;
+    margin-bottom: 0px;
+}
+
+input[type=button]{
+    background-color: rgba(10,70,60,0.8);
     font-size: 18px;
+    font-weight: 700;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+input[type=button]:hover{
+    background-color: rgba(10,70,60,1);
+}
+
+input[type=button]:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 0 5px #ccc;
+}
+
+.toggle-days-displayed{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+
+.day_wrap{
+    flex: 1;
 }
 
 a{
@@ -77,4 +154,32 @@ a{
 
 .backwards, .forwards{
     width: 100%;
+}
+
+.weekdays{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.weekdays div{
+    background: linear-gradient(rgba(30,30,30,0.8), rgba(30,30,30,0.8));
+    margin: 0px 10px 0px 10px;
+    flex: 1;
+    border-radius: 3px;
+}
+
+.weekdays div span{
+    margin: 10px;
+    font-size: 22px;
+    width: 100%;
+    display: block;
+}
+
+.weekend, .Szombat-display, .Vasárnap-display{
+    display: none;
+}
+
+.day_wrap, .weekdays div{
+    margin: 10px 20px 10px 20px;
 }

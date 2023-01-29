@@ -1,13 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import FileResponse, HttpResponse
 from .models import Date, Project, DateBoundWithProject, Subproject, Artifact, Profile
-from .forms import DateBoundWithProjectForm
+from .forms import DateBoundWithProjectForm, ExportDates
 import datetime
-from django.utils import timezone
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
+from openpyxl.utils import get_column_letter
+from concurrent.futures import ThreadPoolExecutor, wait
+from io import BytesIO
 
 
 def Monitoring_group_check(user):
-    return user.groups.filter(name='Schedule - Monitoring').exists()
+    return user.groups.filter(name='Schedule - Monitoring').exists() or user.is_superuser
 
 
 @user_passes_test(Monitoring_group_check)
@@ -42,7 +47,6 @@ def admin(request, year=datetime.date.year, month=datetime.date.month):
                 date = Date.objects.get(date=day[8])
                 day.append(date)
 
-
     # updating project status
     for date in dates_in_database:
         if DateBoundWithProject.objects.filter(date=date):
@@ -64,9 +68,11 @@ def admin(request, year=datetime.date.year, month=datetime.date.month):
 
                             if project.project.hasSubproject():
                                 if project.project.project in day[10].keys():
-                                    day[10][project.project.project].append(f"{project.subproject.name} - {len(project.profile.all())} cső")
+                                    day[10][project.project.project].append(
+                                        f"{project.subproject.name} - {len(project.profile.all())} cső")
                                 else:
-                                    day[10].update({project.project.project: [f"{project.subproject.name} - {len(project.profile.all())} cső"]})
+                                    day[10].update({project.project.project: [
+                                        f"{project.subproject.name} - {len(project.profile.all())} cső"]})
 
                             else:
                                 if project.project.project in day[10].keys():
@@ -78,11 +84,111 @@ def admin(request, year=datetime.date.year, month=datetime.date.month):
                         continue
                     continue
 
-
     dates_in_database = [date.__str__() for date in dates_in_database]
     month_str = str(month)
-    context = {"cal": cal, "dates_in_database": dates_in_database, "year": year, "month_str": month_str}
+
+    today = datetime.datetime.today()
+    start = today - datetime.timedelta(days=today.weekday())
+    end = start + datetime.timedelta(days=6)
+    export_dates = ExportDates(initial={"start": start, "end": end})
+    context = {"cal": cal, "dates_in_database": dates_in_database, "year": year, "month_str": month_str,
+               "export_dates": export_dates}
     return render(request=request, template_name="schedule/admin.html", context=context)
+    # return render(request=request, template_name="schedule/admin.html", context={"cal": cal})
+
+
+def export_dates(request):
+    start = datetime.datetime.strptime(request.GET["start"], "%Y-%m-%d")
+    end = datetime.datetime.strptime(request.GET["end"], "%Y-%m-%d")
+    sullyedesmeres_project = Project.objects.get(project="Süllyedésmérés")
+    sullyedesmeres = DateBoundWithProject.objects.filter(project=sullyedesmeres_project,
+                                                         date__date__range=[start, end]).order_by("date__date")
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Süllyedésmérés"
+    ws.append(["Iktatószám", "Megrendelő", "Helyszín", "Híd jele", "Szelvényszám", "Cső hossza", "Mérés dátuma"])
+
+    breaklines = []
+    row_no = 1
+    for index, project in enumerate(sullyedesmeres):
+        meres_datuma = project.date.date
+        iktatoszam = project.subproject.subproject
+        megrendelo = project.subproject.customer
+        helyszin = project.subproject.name
+
+        if index> 0 and meres_datuma != ws[f"G{row_no}"] and iktatoszam != ws[f"A{row_no}"]:
+            breaklines.append(row_no)
+
+        profiles = project.profile.all()
+        for profile in profiles:
+            hid_jele = project.artifact.artifact
+            szelvenyszam = profile.profile
+            cso_hossza = f"{profile.length} m"
+
+            row_no += 1
+            ws.append([iktatoszam, megrendelo, helyszin, hid_jele, szelvenyszam, cso_hossza, meres_datuma])
+
+    thin_border = Border(left=Side(style='thin', color="000000"),
+                         right=Side(style='thin', color="000000"),
+                         top=Side(style='thin', color="000000"),
+                         bottom=Side(style='thin', color="000000"))
+
+    thick_side = Side(style='thick', color="000000")
+
+    for row in ws.iter_rows():
+        for cell in row:
+            cell.border = thin_border
+            cell.font = Font(name="Arial")
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+
+    for col in ["A", "B", "C", "D", "E", "F", "G"]:
+        new_style = ws[f"{col}1"].border.copy()
+        new_style.top = thick_side
+        new_style.bottom = thick_side
+        ws[f"{col}1"].border = new_style
+
+        new_style = ws[f"{col}{ws.max_row}"].border.copy()
+        new_style.bottom = thick_side
+        ws[f"{col}{ws.max_row}"].border = new_style
+
+        for line in breaklines:
+            new_style = ws[f"{col}{line}"].border.copy()
+            new_style.bottom = thick_side
+            ws[f"{col}{line}"].border = new_style
+
+    for row in range(1, ws.max_row + 1):
+        new_style = ws[f"A{row}"].border.copy()
+        new_style.left = thick_side
+        ws[f"A{row}"].border = new_style
+
+        new_style = ws[f"G{row}"].border.copy()
+        new_style.right = thick_side
+        ws[f"G{row}"].border = new_style
+
+
+    bold_font = Font(bold=True, name="Arial")
+    grey_fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+    for cell in ws[1]:
+        cell.font = bold_font
+        cell.fill = grey_fill
+
+    for col in ws.columns:
+        max_length = max(len(str(cell.value)) for cell in col)
+        adjusted_width = (max_length + 1.4)
+        ws.column_dimensions[get_column_letter(col[0].column)].width = adjusted_width
+
+
+    file_name = f"fugro_export_from_{request.GET['start']}_to_{request.GET['end']}.xlsx"
+    buffer = BytesIO()
+    executor = ThreadPoolExecutor()
+    save_future = executor.submit(wb.save, buffer)
+    wait([save_future])
+    buffer.seek(0)
+
+    response = FileResponse(buffer, as_attachment=True, filename=file_name)
+    response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+    return response
 
 
 @user_passes_test(Monitoring_group_check)
@@ -151,7 +257,6 @@ def date(request, year, month, day):
 
             return redirect("date", previous_day.year, previous_day.month, previous_day.day)
 
-
     context = {"year_": year, "month_": month, "day_": day, "saved_projects_for_the_day": saved_projects_for_the_day,
                "untouched_projects": untouched_projects, "date_bound_project_form": date_bound_project_form,
                "saved_projects_and_forms": saved_projects_and_forms}
@@ -219,6 +324,18 @@ def partial_save(request):
     return render(request, 'schedule/ajax/partial_save.html', context={"context": context})
 
 
+def re_date_project(request):
+    project = DateBoundWithProject.objects.get(pk=request.GET["project_id"])
+    new_date = datetime.datetime.strptime(request.GET["new_date"], "%Y-%m-%d")
+    project.date = Date.objects.get(date=new_date)
+    project.save()
+
+    year = request.GET["year"]
+    month = request.GET["month"]
+    day = request.GET["day"]
+
+    return redirect(date, year, month, day)
+
 @user_passes_test(Monitoring_group_check)
 @login_required()
 def user_calendar(request, year=datetime.date.year, month=datetime.date.month):
@@ -230,14 +347,14 @@ def user_calendar(request, year=datetime.date.year, month=datetime.date.month):
                 month = 12
                 year -= 1
 
-            return redirect(admin, year=year, month=month)
+            return redirect(user_calendar, year=year, month=month)
         elif "next_month" in request.GET:
             if month < 12:
                 month += 1
             else:
                 month = 1
                 year += 1
-            return redirect(admin, year=year, month=month)
+            return redirect(user_calendar, year=year, month=month)
 
     cal = get_calendar(year, month)
 
@@ -245,11 +362,12 @@ def user_calendar(request, year=datetime.date.year, month=datetime.date.month):
     active_days = []
     for week in cal:
         for day in week:
-            date = Date.objects.get(date=day[8])
-            projects_for_specific_day = DateBoundWithProject.objects.filter(date=date)
-            for project in projects_for_specific_day:
-                if user in project.employee.all():
-                    active_days.append(day[3])
+            if Date.objects.filter(date=day[8]):
+                date = Date.objects.get(date=day[8])
+                projects_for_specific_day = DateBoundWithProject.objects.filter(date=date)
+                for project in projects_for_specific_day:
+                    if user in project.employee.all():
+                        active_days.append(day[3])
 
     month_str = str(month)
     context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days}
