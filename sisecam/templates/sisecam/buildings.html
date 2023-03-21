@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends "bmw/base.html" %}
+{% load static %}
+
+{% block title %}
+Fugro - Şişecam - Épületek
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'sisecam/css/buildings.css' %}">
+
+
+<section class="background">
+    <div class="box" id="box" data-url="{% url 'buildings_ajax' %}">
+        <span class="text-center" id="result">{{result}}</span>
+            <input class="text_style_input" type="number" name="sorszam" id="sorszam" placeholder="Sorszám">
+
+            <div id="ajax-select-wrapper" class="ajax-select" data-select-url="{% url 'ajax_buildings_select' %}">
+                <select class="select2" name="extra-select" id="extra-select"></select>
+            </div>
+
+            <input type="button" class="btn button-37" id="calculate" data-calculate-url="{% url 'ajax_calculate_url' %}" value="Számol">
+    </div>
+</section>
+
+<script src="{% static 'sisecam/js/buildings.js' %}"></script>
+
+{% endblock %}

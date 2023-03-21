@@ -1,0 +1,8 @@
+{% if result.sorszam %}
+    <div class="upper">
+        {{ result.sorszam }} - {{ result.kivitelezett_hossz }}
+    </div>
+    <div class="lower">{{ result.terulet }}</div>
+{% else %}
+    <div class="incorrect">{{ result }}</div>
+{% endif %}

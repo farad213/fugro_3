@@ -8,4 +8,5 @@ urlpatterns = [
     path('', include('bmw.urls')),
     path('schedule/', include('schedule.urls')),
     path("accounts/", include("django.contrib.auth.urls")),
+    path("sisecam/", include("sisecam.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
