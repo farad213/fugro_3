@@ -101,8 +101,8 @@ class Date(models.Model):
 class DateBoundWithProject(models.Model):
     date = models.ForeignKey(Date, on_delete=models.CASCADE, null=True)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
-    employee = models.ManyToManyField(User)
-    vehicle = models.ManyToManyField(Vehicle)
+    employee = models.ManyToManyField(User, blank=True)
+    vehicle = models.ManyToManyField(Vehicle, blank=True)
     comment = models.TextField(null=True, blank=True)
     subproject = models.ForeignKey(Subproject, on_delete=models.CASCADE, null=True)
     artifact = models.ForeignKey(Artifact, on_delete=models.CASCADE, null=True)
