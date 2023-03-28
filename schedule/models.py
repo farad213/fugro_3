@@ -78,6 +78,7 @@ class Date(models.Model):
     state = models.CharField(max_length=15, choices=[("untouched", "untouched"), ("draft", "draft"), ("done", "done")],
                              default="untouched")
     employees_on_leave = models.ManyToManyField(User, blank=True)
+    is_holiday = models.BooleanField()
 
     def hasProjectFunc(self, project):
         if DateBoundWithProject.objects.filter(date=self, project=project):
