@@ -11,6 +11,8 @@ Fugro
 <link rel="stylesheet" href="{% static 'bmw/css/home_style.css' %}">
 
 <section class="background">
+    <div class="spacer"></div>
+<div class="app">BMW</div>
     <div class="link-section">
         <a class="pic_link" href="{% url 'jelkod' %}">
             <div class="promo" style="--overlay-color: yellow">
@@ -38,6 +40,42 @@ Fugro
               <h2 class="title" data-cta="tovább →">Gyorsjelentés</h2>
             </div>
         </a>
+        </div>
+
+    <div class="app">Şişecam</div>
+    <div class="link-section">
+        <a class="pic_link" href="{% url 'sisecam_buildings' %}">
+            <div class="promo" style="--overlay-color:  Turquoise">
+              <div class="image-wrapper">
+                  <img src="{% static 'bmw/images/sisecam_buildings.jpg' %}"/>
+              </div>
+              <h2 class="title" data-cta="tovább →">Épületek</h2>
+            </div>
+        </a>
+
+        </div>
+
+    <div class="app">Beosztás</div>
+    <div class="link-section">
+        <a class="pic_link" href="{% url 'calendar' year=year month=month %}">
+            <div class="promo" style="--overlay-color:  DarkGoldenrod">
+              <div class="image-wrapper">
+                  <img src="{% static 'bmw/images/calendar.jpg' %}"/>
+              </div>
+              <h2 class="title" data-cta="tovább →">Munkaidő</h2>
+            </div>
+        </a>
+
+        {% if user.is_staff %}
+       <a class="pic_link" href="{% url 'admin' year=year month=month %}">
+        <div class="promo" style="--overlay-color:  LightCoral">
+          <div class="image-wrapper">
+              <img src="{% static 'bmw/images/background.jpg' %}"/>
+          </div>
+          <h2 class="title" data-cta="tovább →">Admin</h2>
+        </div>
+        </a>
+        {% endif %}
         </div>
 </section>
 
