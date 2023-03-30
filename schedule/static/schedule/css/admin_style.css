@@ -184,6 +184,7 @@ a{
     width: 20%;
     height: 20px;
     background-size: contain;
+    background-position: center;
 }
 
 .probaterheles.false{
