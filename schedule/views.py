@@ -132,6 +132,7 @@ def check_SIT(request):
 
     return JsonResponse(dates_without_sit_details, safe=False)
 
+
 @user_passes_test(Monitoring_group_check)
 @login_required
 def export_dates(request):
@@ -471,18 +472,29 @@ def user_calendar(request, year=datetime.date.year, month=datetime.date.month):
 
     user = request.user
     active_days = []
+    bubbles_context = {}
     for week in cal:
         for day in week:
             if Date.objects.filter(date=day[8]):
+                bubbles_context.update({day[3]: {project_type.project: [] for project_type in Project.objects.all()}})
                 date = Date.objects.get(date=day[8])
                 projects_for_specific_day = DateBoundWithProject.objects.filter(date=date)
                 for project in projects_for_specific_day:
                     if user in project.employee.all():
                         active_days.append(day[3])
-
+                        if project.project.hasSubproject():
+                            subprojects = set()
+                            for profile in project.profile.all():
+                                subprojects.add(profile.artifact.subproject)
+                            for subproject in subprojects:
+                                bubbles_context[day[3]][project.project.project].append(
+                                    f"{subproject.name} - {len(project.profile.filter(artifact__subproject=subproject))} cső")
+                        else:
+                            bubbles_context[day[3]][project.project.project].append(project.comment)
 
     month_str = str(month)
-    context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days}
+    context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days,
+               "bubbles_context": bubbles_context}
     return render(request=request, template_name="schedule/user_calendar.html", context=context)
 
 
@@ -594,6 +606,7 @@ def get_calendar(year, month):
             week[i] = [date_str, day, month_str, full_date_str, day_int, month_int, year_int, month_str_from_int, date]
     return dates
 
+
 @user_passes_test(Monitoring_group_check)
 @login_required
 def repeat_project(request):
@@ -671,6 +684,7 @@ def repeat_project(request):
 
     return redirect("date", year, month, day)
 
+
 @user_passes_test(Monitoring_group_check)
 @login_required
 def SIT_details(request):
@@ -708,17 +722,29 @@ def user_selection(request, year=datetime.date.today().year, month=datetime.date
     cal = get_calendar(year, month)
 
     active_days = []
+    bubbles_context = {}
     for week in cal:
         for day in week:
             if Date.objects.filter(date=day[8]):
+                bubbles_context.update({day[3]: {project_type.project: [] for project_type in Project.objects.all()}})
                 date = Date.objects.get(date=day[8])
                 projects_for_specific_day = DateBoundWithProject.objects.filter(date=date)
                 for project in projects_for_specific_day:
                     if user in project.employee.all():
                         active_days.append(day[3])
+                        if project.project.hasSubproject():
+                            subprojects = set()
+                            for profile in project.profile.all():
+                                subprojects.add(profile.artifact.subproject)
+                            for subproject in subprojects:
+                                bubbles_context[day[3]][project.project.project].append(
+                                    f"{subproject.name} - {len(project.profile.filter(artifact__subproject=subproject))} cső")
+                        else:
+                            bubbles_context[day[3]][project.project.project].append(project.comment)
 
     month_str = str(month)
-    context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days, "id": id}
+    context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days, "id": id,
+               "bubbles_context": bubbles_context}
     return render(request=request, template_name="schedule/ajax/user_selection.html", context=context)
 
 
@@ -792,4 +818,3 @@ def day_nav_user_date(request):
         return user_selection_date(request, date.year, date.month, date.day, id)
 
     return user_date(request, date.year, date.month, date.day)
-

@@ -29,10 +29,10 @@ Fugro - Beosztás - Dátum
     </div>
 
     <div class="project-selection-wrapper">
-    {% for project in untouched_projects %}
+        {% for project in untouched_projects %}
         <input type="checkbox" id="{{ project }}_checkbox" class="checkbox" value="{{ project }}">
         <label for="{{ project }}_checkbox" class="checkbox-label cyan-button">{{ project }}</label>
-    {% endfor %}
+        {% endfor %}
     </div>
 
 

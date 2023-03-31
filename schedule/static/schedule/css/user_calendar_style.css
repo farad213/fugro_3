@@ -236,3 +236,18 @@ a{
 .other.true{
     background-image:  url(../images/other_green.png);
 }
+
+.bubble {
+  background-color: #333333;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-size: 12px;
+  padding: 5px;
+  margin-top: 25px;
+  display: inline-block;
+  width: auto;
+  border-radius: 5px;
+  white-space: nowrap;
+  position: absolute;
+  z-index: 999;
+}
