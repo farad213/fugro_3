@@ -6,7 +6,7 @@ from functools import partial
 class Vehicle(models.Model):
     license_plate = models.CharField(max_length=20, verbose_name="Rendszám")
     vehicle_name = models.CharField(max_length=30, verbose_name="Autó neve")
-    archived = models.BooleanField(verbose_name="Archiválva")
+    archived = models.DateField(verbose_name="Archiválva", null=True)
 
     class Meta:
         verbose_name = "Jármű"

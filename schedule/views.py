@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponse, JsonResponse
 from django.urls import reverse
-
-from .models import Date, Project, DateBoundWithProject, Subproject, Artifact, Profile, SIT_with_date, SIT_project
+from django.db.models import Q
+from .models import Date, Project, DateBoundWithProject, Subproject, Artifact, Profile, SIT_with_date, SIT_project, \
+    Vehicle
 from .forms import DateBoundWithProjectForm, ExportDates, SIT_with_date_form
 import datetime
 from openpyxl import Workbook
@@ -307,6 +308,7 @@ def date(request, year, month, day):
     saved_projects_for_the_day = DateBoundWithProject.objects.filter(date=date).order_by("project")
     saved_projects = [saved_project for saved_project in saved_projects_for_the_day]
     untouched_projects = [project for project in projects]
+
 
     date_bound_project_form = DateBoundWithProjectForm(date=datetime.date(year, month, day))
 
