@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends "bmw/base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}
 Fugro - Beosztás - {{ user }}
@@ -39,15 +40,15 @@ Fugro - Beosztás - {{ user }}
                         <div class="text">
                             <div class="date">{{ day.0 }}</div>
                             <div class="icons">
-                                <div class="probaterheles {{day.9.hasProject.Próbaterhelés}}"
-                                     data-bubble="{{day.10.Próbaterhelés}}"></div>
-                                <div class="sullyedesmeres {{day.9.hasProject.Süllyedésmérés}}"
-                                     data-bubble="{{day.10.Süllyedésmérés}}"></div>
-                                <div class="integritasvizsgalat {{day.9.hasProject.Integritásvizsgálat}}"
-                                     data-bubble="{{day.10.Integritásvizsgálat}}"></div>
-                                <div class="inklinometer {{day.9.hasProject.Inklinométer}}"
-                                     data-bubble="{{day.10.Inklinométer}}"></div>
-                                <div class="other {{day.9.hasProject.Egyéb}}" data-bubble="{{day.10.Egyéb}}"></div>
+                                <div class="probaterheles"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Próbaterhelés'}}"></div>
+                                <div class="sullyedesmeres"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Süllyedésmérés' }}"></div>
+                                <div class="integritasvizsgalat"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Integritásvizsgálat' }}"></div>
+                                <div class="inklinometer"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Inklinométer' }}"></div>
+                                <div class="other" data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Egyéb' }}"></div>
                             </div>
                         </div>
 
@@ -59,15 +60,15 @@ Fugro - Beosztás - {{ user }}
                         <div class="text">
                             <div class="date">{{ day.0 }}</div>
                             <div class="icons">
-                                <div class="probaterheles {{day.9.hasProject.Próbaterhelés}}"
-                                     data-bubble="{{day.10.Próbaterhelés}}"></div>
-                                <div class="sullyedesmeres {{day.9.hasProject.Süllyedésmérés}}"
-                                     data-bubble="{{day.10.Süllyedésmérés}}"></div>
-                                <div class="integritasvizsgalat {{day.9.hasProject.Integritásvizsgálat}}"
-                                     data-bubble="{{day.10.Integritásvizsgálat}}"></div>
-                                <div class="inklinometer {{day.9.hasProject.Inklinométer}}"
-                                     data-bubble="{{day.10.Inklinométer}}"></div>
-                                <div class="other {{day.9.hasProject.Egyéb}}" data-bubble="{{day.10.Egyéb}}"></div>
+                                <div class="probaterheles"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Próbaterhelés'}}"></div>
+                                <div class="sullyedesmeres"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Süllyedésmérés' }}"></div>
+                                <div class="integritasvizsgalat"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Integritásvizsgálat' }}"></div>
+                                <div class="inklinometer"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Inklinométer' }}"></div>
+                                <div class="other" data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Egyéb' }}"></div>
                             </div>
                         </div>
 
@@ -81,15 +82,15 @@ Fugro - Beosztás - {{ user }}
                         <div class="text">
                             <div class="date">{{ day.0 }}</div>
                             <div class="icons">
-                                <div class="probaterheles {{day.9.hasProject.Próbaterhelés}}"
-                                     data-bubble="{{day.10.Próbaterhelés}}"></div>
-                                <div class="sullyedesmeres {{day.9.hasProject.Süllyedésmérés}}"
-                                     data-bubble="{{day.10.Süllyedésmérés}}"></div>
-                                <div class="integritasvizsgalat {{day.9.hasProject.Integritásvizsgálat}}"
-                                     data-bubble="{{day.10.Integritásvizsgálat}}"></div>
-                                <div class="inklinometer {{day.9.hasProject.Inklinométer}}"
-                                     data-bubble="{{day.10.Inklinométer}}"></div>
-                                <div class="other {{day.9.hasProject.Egyéb}}" data-bubble="{{day.10.Egyéb}}"></div>
+                                <div class="probaterheles"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Próbaterhelés'}}"></div>
+                                <div class="sullyedesmeres"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Süllyedésmérés' }}"></div>
+                                <div class="integritasvizsgalat"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Integritásvizsgálat' }}"></div>
+                                <div class="inklinometer"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Inklinométer' }}"></div>
+                                <div class="other" data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Egyéb' }}"></div>
                             </div>
                         </div>
 
@@ -101,15 +102,15 @@ Fugro - Beosztás - {{ user }}
                         <div class="text">
                             <div class="date">{{ day.0 }}</div>
                             <div class="icons">
-                                <div class="probaterheles {{day.9.hasProject.Próbaterhelés}}"
-                                     data-bubble="{{day.10.Próbaterhelés}}"></div>
-                                <div class="sullyedesmeres {{day.9.hasProject.Süllyedésmérés}}"
-                                     data-bubble="{{day.10.Süllyedésmérés}}"></div>
-                                <div class="integritasvizsgalat {{day.9.hasProject.Integritásvizsgálat}}"
-                                     data-bubble="{{day.10.Integritásvizsgálat}}"></div>
-                                <div class="inklinometer {{day.9.hasProject.Inklinométer}}"
-                                     data-bubble="{{day.10.Inklinométer}}"></div>
-                                <div class="other {{day.9.hasProject.Egyéb}}" data-bubble="{{day.10.Egyéb}}"></div>
+                                <div class="probaterheles"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Próbaterhelés'}}"></div>
+                                <div class="sullyedesmeres"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Süllyedésmérés' }}"></div>
+                                <div class="integritasvizsgalat"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Integritásvizsgálat' }}"></div>
+                                <div class="inklinometer"
+                                     data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Inklinométer' }}"></div>
+                                <div class="other" data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Egyéb' }}"></div>
                             </div>
                         </div>
 

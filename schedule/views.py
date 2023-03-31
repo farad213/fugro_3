@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponse, JsonResponse
 from django.urls import reverse
-
-from .models import Date, Project, DateBoundWithProject, Subproject, Artifact, Profile, SIT_with_date, SIT_project
+from django.db.models import Q
+from .models import Date, Project, DateBoundWithProject, Subproject, Artifact, Profile, SIT_with_date, SIT_project, \
+    Vehicle
 from .forms import DateBoundWithProjectForm, ExportDates, SIT_with_date_form
 import datetime
 from openpyxl import Workbook
@@ -88,12 +89,17 @@ def admin(request, year=datetime.date.year, month=datetime.date.month):
                                 day.append({})
 
                             if project.project.hasSubproject():
-                                if project.project.project in day[10].keys():
-                                    day[10][project.project.project].append(
-                                        f"{project.subproject.name} - {len(project.profile.all())} cső")
-                                else:
-                                    day[10].update({project.project.project: [
-                                        f"{project.subproject.name} - {len(project.profile.all())} cső"]})
+                                subprojects = set()
+                                for profile in project.profile.all():
+                                    subprojects.add(profile.artifact.subproject)
+
+                                for subproject in subprojects:
+                                    if project.project.project in day[10].keys():
+                                        day[10][project.project.project].append(
+                                            f"{subproject.name} - {len(project.profile.filter(artifact__subproject=subproject))} cső")
+                                    else:
+                                        day[10].update({project.project.project: [
+                                            f"{subproject.name} - {len(project.profile.filter(artifact__subproject=subproject))} cső"]})
 
                             else:
                                 if project.project.project in day[10].keys():
@@ -131,6 +137,7 @@ def check_SIT(request):
     dates_without_sit_details = sorted(dates_without_sit_details)
 
     return JsonResponse(dates_without_sit_details, safe=False)
+
 
 @user_passes_test(Monitoring_group_check)
 @login_required
@@ -302,6 +309,7 @@ def date(request, year, month, day):
     saved_projects = [saved_project for saved_project in saved_projects_for_the_day]
     untouched_projects = [project for project in projects]
 
+
     date_bound_project_form = DateBoundWithProjectForm(date=datetime.date(year, month, day))
 
     saved_project_forms = [DateBoundWithProjectForm(instance=project, date=datetime.date(year, month, day)) for project
@@ -471,18 +479,29 @@ def user_calendar(request, year=datetime.date.year, month=datetime.date.month):
 
     user = request.user
     active_days = []
+    bubbles_context = {}
     for week in cal:
         for day in week:
             if Date.objects.filter(date=day[8]):
+                bubbles_context.update({day[3]: {project_type.project: [] for project_type in Project.objects.all()}})
                 date = Date.objects.get(date=day[8])
                 projects_for_specific_day = DateBoundWithProject.objects.filter(date=date)
                 for project in projects_for_specific_day:
                     if user in project.employee.all():
                         active_days.append(day[3])
-
+                        if project.project.hasSubproject():
+                            subprojects = set()
+                            for profile in project.profile.all():
+                                subprojects.add(profile.artifact.subproject)
+                            for subproject in subprojects:
+                                bubbles_context[day[3]][project.project.project].append(
+                                    f"{subproject.name} - {len(project.profile.filter(artifact__subproject=subproject))} cső")
+                        else:
+                            bubbles_context[day[3]][project.project.project].append(project.comment)
 
     month_str = str(month)
-    context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days}
+    context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days,
+               "bubbles_context": bubbles_context}
     return render(request=request, template_name="schedule/user_calendar.html", context=context)
 
 
@@ -594,6 +613,7 @@ def get_calendar(year, month):
             week[i] = [date_str, day, month_str, full_date_str, day_int, month_int, year_int, month_str_from_int, date]
     return dates
 
+
 @user_passes_test(Monitoring_group_check)
 @login_required
 def repeat_project(request):
@@ -671,6 +691,7 @@ def repeat_project(request):
 
     return redirect("date", year, month, day)
 
+
 @user_passes_test(Monitoring_group_check)
 @login_required
 def SIT_details(request):
@@ -708,17 +729,29 @@ def user_selection(request, year=datetime.date.today().year, month=datetime.date
     cal = get_calendar(year, month)
 
     active_days = []
+    bubbles_context = {}
     for week in cal:
         for day in week:
             if Date.objects.filter(date=day[8]):
+                bubbles_context.update({day[3]: {project_type.project: [] for project_type in Project.objects.all()}})
                 date = Date.objects.get(date=day[8])
                 projects_for_specific_day = DateBoundWithProject.objects.filter(date=date)
                 for project in projects_for_specific_day:
                     if user in project.employee.all():
                         active_days.append(day[3])
+                        if project.project.hasSubproject():
+                            subprojects = set()
+                            for profile in project.profile.all():
+                                subprojects.add(profile.artifact.subproject)
+                            for subproject in subprojects:
+                                bubbles_context[day[3]][project.project.project].append(
+                                    f"{subproject.name} - {len(project.profile.filter(artifact__subproject=subproject))} cső")
+                        else:
+                            bubbles_context[day[3]][project.project.project].append(project.comment)
 
     month_str = str(month)
-    context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days, "id": id}
+    context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days, "id": id,
+               "bubbles_context": bubbles_context}
     return render(request=request, template_name="schedule/ajax/user_selection.html", context=context)
 
 
@@ -792,4 +825,3 @@ def day_nav_user_date(request):
         return user_selection_date(request, date.year, date.month, date.day, id)
 
     return user_date(request, date.year, date.month, date.day)
-

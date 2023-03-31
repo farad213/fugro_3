@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load custom_filters %}
 
 
 <link rel="stylesheet" href="{% static 'schedule/css/user_calendar_style.css' %}">
@@ -18,42 +19,85 @@
         {% for day in week %}
         {% if day.7 == month_str %}
         {% if day.3 in active_days %}
-        {% with id as user_id %}
-        <a class="day_wrap {{day.1}}-display"
-           href="{% url 'user_selection_date' year=day.6 month=day.5 day=day.4 id=user_id%}">
-            {% endwith %}
+        <a class="day_wrap {{day.1}}-display" href="{% url 'calendar_date' year=day.6 month=day.5 day=day.4 %}">
             <div class="day current_month {{day.1}} active">
                 <div class="text">
                     <div class="date">{{ day.0 }}</div>
+                    <div class="icons">
+                        <div class="probaterheles"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Próbaterhelés'}}"></div>
+                        <div class="sullyedesmeres"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Süllyedésmérés' }}"></div>
+                        <div class="integritasvizsgalat"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Integritásvizsgálat' }}"></div>
+                        <div class="inklinometer"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Inklinométer' }}"></div>
+                        <div class="other" data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Egyéb' }}"></div>
+                    </div>
                 </div>
+
             </div>
         </a>
         {% else %}
-        <a class="day_wrap {{day.1}}-display disabled_a">
+        <a class="day_wrap {{day.1}}-display disabled_a" href="">
             <div class="day {{day.1}} current_month">
                 <div class="text">
                     <div class="date">{{ day.0 }}</div>
+                    <div class="icons">
+                        <div class="probaterheles"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Próbaterhelés'}}"></div>
+                        <div class="sullyedesmeres"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Süllyedésmérés' }}"></div>
+                        <div class="integritasvizsgalat"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Integritásvizsgálat' }}"></div>
+                        <div class="inklinometer"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Inklinométer' }}"></div>
+                        <div class="other" data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Egyéb' }}"></div>
+                    </div>
                 </div>
+
             </div>
         </a>
         {% endif %}
         {% else %}
         {% if day.3 in active_days %}
-        {% with id as user_id %}
-        <a class="day_wrap {{day.1}}-display" href="{% url 'user_selection_date' year=day.6 month=day.5 day=day.4 id=user_id%}">
-        {% endwith %}
+        <a class="day_wrap {{day.1}}-display" href="{% url 'calendar_date' year=day.6 month=day.5 day=day.4 %}">
             <div class="day {{day.1}} not_current_month active">
                 <div class="text">
                     <div class="date">{{ day.0 }}</div>
+                    <div class="icons">
+                        <div class="probaterheles"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Próbaterhelés'}}"></div>
+                        <div class="sullyedesmeres"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Süllyedésmérés' }}"></div>
+                        <div class="integritasvizsgalat"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Integritásvizsgálat' }}"></div>
+                        <div class="inklinometer"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Inklinométer' }}"></div>
+                        <div class="other" data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Egyéb' }}"></div>
+                    </div>
                 </div>
+
             </div>
         </a>
         {% else %}
-        <a class="day_wrap {{day.1}}-display disabled_a">
+        <a class="day_wrap {{day.1}}-display disabled_a" href="">
             <div class="day {{day.1}} not_current_month">
                 <div class="text">
                     <div class="date">{{ day.0 }}</div>
+                    <div class="icons">
+                        <div class="probaterheles"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Próbaterhelés'}}"></div>
+                        <div class="sullyedesmeres"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Süllyedésmérés' }}"></div>
+                        <div class="integritasvizsgalat"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Integritásvizsgálat' }}"></div>
+                        <div class="inklinometer"
+                             data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Inklinométer' }}"></div>
+                        <div class="other" data-bubble="{{ bubbles_context|get_item:day.3|get_item:'Egyéb' }}"></div>
+                    </div>
                 </div>
+
             </div>
         </a>
         {% endif %}
@@ -61,9 +105,10 @@
         {% endfor %}
     </div>
     {% endfor %}
-        <div class="nav_buttons nav_buttons_user_selection" data-month-change-url="{% url 'month_change_user_selection' %}" data-year="{{ year }}" data-month="{{ month_str }}">
-            <button class="button-69 backwards" id="backwards" value="backwards"><span>&#10229;</span></button>
-            <button class="button-68 forwards" id="forwards" value="forwards"><span>&#10230;</span></button>
-        </div>
+    <div class="nav_buttons nav_buttons_user_selection" data-month-change-url="{% url 'month_change_user_selection' %}"
+         data-year="{{ year }}" data-month="{{ month_str }}">
+        <button class="button-69 backwards" id="backwards" value="backwards"><span>&#10229;</span></button>
+        <button class="button-68 forwards" id="forwards" value="forwards"><span>&#10230;</span></button>
+    </div>
 
 </div>

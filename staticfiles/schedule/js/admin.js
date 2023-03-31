@@ -1,22 +1,4 @@
-$( document ).ready(function() {
-
-function isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
- $('.icons > div').on('click', function(event) {
-if (isMobile()) {
-event.preventDefault();
-}
-});
-
-
- $('.ppl-image-green, .ppl-image').on('click', function(event) {
-if (isMobile()) {
-event.preventDefault();
-}
-});
-
+function addBubblesToIcons(){
     $('.icons > div').hover(function() {
   if (this.classList.contains('true')) {
     // Get the value of the data-bubble attribute and parse it into a JavaScript array
@@ -36,9 +18,33 @@ event.preventDefault();
 }, function() {
   // Remove the bubble when the mouse leaves the icon
   $(this).find('.bubble').remove();
-
-
 });
+}
+
+
+$( document ).ready(function() {
+
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+ $('.icons > div').on('click', function(event) {
+if (isMobile()) {
+event.preventDefault();
+}
+});
+
+
+ $('.ppl-image-green, .ppl-image').on('click', function(event) {
+if (isMobile()) {
+event.preventDefault();
+}
+});
+
+
+
+addBubblesToIcons();
+
   var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -177,6 +183,15 @@ $(".user-selection input").each(function(){
           success: function(response) {
                if (id !== "Admin") {
                   $(".calendar").html(response);
+                  $('.icons [data-bubble]').each(function() {
+                      var bubbleData = $(this).data('bubble');
+                      if (bubbleData.length === 0) {
+                        $(this).addClass('false');
+                      } else {
+                        $(this).addClass('true');
+                      }
+                    });
+                    addBubblesToIcons();
                } else {
                   window.location.href = response;
                }

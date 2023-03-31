@@ -1,6 +1,7 @@
 from django import forms
 from .models import DateBoundWithProject, Vehicle, Artifact, Profile, Subproject, Date, SIT_with_date
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 class DateBoundWithProjectForm(forms.ModelForm):
@@ -17,15 +18,15 @@ class DateBoundWithProjectForm(forms.ModelForm):
     def __init__(self, date, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        if date:
+            self.fields['vehicle'].queryset = Vehicle.objects.filter(
+                Q(archived__isnull=True) | Q(archived__gt=date)
+            )
+
         all_possible_employees = User.objects.filter(groups__name="Schedule - Monitoring")
         employees_on_leave = Date.objects.get(date=date).employees_on_leave.all()
         available_employees = [employee.id for employee in all_possible_employees if employee not in employees_on_leave]
 
-        instance = kwargs.get('instance', None)
-        if instance:
-            self.fields['vehicle'].queryset = Vehicle.objects.all()
-        else:
-            self.fields['vehicle'].queryset = Vehicle.objects.filter(archived=False)
 
         self.fields['employee'].label_from_instance = self.label_from_instance_employee
         self.fields['vehicle'].label_from_instance = self.label_from_instance_vehicle
