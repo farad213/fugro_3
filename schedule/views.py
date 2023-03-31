@@ -480,6 +480,7 @@ def user_calendar(request, year=datetime.date.year, month=datetime.date.month):
                     if user in project.employee.all():
                         active_days.append(day[3])
 
+
     month_str = str(month)
     context = {"cal": cal, "year": year, "month_str": month_str, "active_days": active_days}
     return render(request=request, template_name="schedule/user_calendar.html", context=context)

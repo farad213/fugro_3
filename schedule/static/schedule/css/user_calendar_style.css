@@ -183,3 +183,56 @@ a{
 .day_wrap, .weekdays div{
     margin: 10px 20px 10px 20px;
 }
+
+.icons{
+    display: flex;
+    justify-content: space-between;
+}
+
+.probaterheles.false, .inklinometer.false, .integritasvizsgalat.false, .sullyedesmeres.false, .other.false, .probaterheles.true, .inklinometer.true, .integritasvizsgalat.true, .sullyedesmeres.true, .other.true{
+    width: 20%;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.probaterheles.false{
+    background-image:  url(../images/probaterheles.png);
+}
+
+.inklinometer.false{
+    background-image:  url(../images/inklinometer.png);
+}
+
+.integritasvizsgalat.false{
+    background-image:  url(../images/integritasvizsgalat.png);
+}
+
+.sullyedesmeres.false{
+    background-image:  url(../images/sullyedesmeres.png);
+}
+
+.other.false{
+    background-image:  url(../images/other.png);
+}
+
+.probaterheles.true{
+    background-image:  url(../images/probaterheles_green.png);
+}
+
+.inklinometer.true{
+    background-image:  url(../images/inklinometer_green.png);
+}
+
+.integritasvizsgalat.true{
+    background-image:  url(../images/integritasvizsgalat_green.png);
+}
+
+.sullyedesmeres.true{
+    background-image:  url(../images/sullyedesmeres_green.png);
+}
+
+.other.true{
+    background-image:  url(../images/other_green.png);
+}

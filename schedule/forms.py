@@ -21,6 +21,12 @@ class DateBoundWithProjectForm(forms.ModelForm):
         employees_on_leave = Date.objects.get(date=date).employees_on_leave.all()
         available_employees = [employee.id for employee in all_possible_employees if employee not in employees_on_leave]
 
+        instance = kwargs.get('instance', None)
+        if instance:
+            self.fields['vehicle'].queryset = Vehicle.objects.all()
+        else:
+            self.fields['vehicle'].queryset = Vehicle.objects.filter(archived=False)
+
         self.fields['employee'].label_from_instance = self.label_from_instance_employee
         self.fields['vehicle'].label_from_instance = self.label_from_instance_vehicle
         self.fields["employee"].queryset = User.objects.filter(id__in=available_employees)

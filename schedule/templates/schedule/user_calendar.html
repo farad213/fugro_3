@@ -10,7 +10,8 @@ Fugro - Beosztás - {{ user }}
 <link rel="stylesheet" href="{% static 'schedule/css/user_calendar_style.css' %}">
 
 <section class="background">
-    <div class="date_title_wrapper"><p class="date_title">Beosztás - {{request.resolver_match.kwargs.year}}.{{request.resolver_match.kwargs.month}}</p></div>
+    <div class="date_title_wrapper"><p class="date_title">Beosztás -
+        {{request.resolver_match.kwargs.year}}.{{request.resolver_match.kwargs.month}}</p></div>
     <div class="toggle-days-displayed">
         <input type="button" name="toggle-days-displayed" value="5 nap">
         <input type="button" name="toggle-days-displayed" value="7 nap">
@@ -29,61 +30,109 @@ Fugro - Beosztás - {{ user }}
                 <div class="weekend"><span>Vasárnap</span></div>
             </div>
             {% for week in cal %}
-                <div class="week">
-                    {% for day in week %}
-                        {% if day.7 == month_str %}
-                            {% if day.3 in active_days %}
-                                <a class="day_wrap {{day.1}}-display" href="{% url 'calendar_date' year=day.6 month=day.5 day=day.4 %}">
-                                    <div class="day current_month {{day.1}} active">
-                                        <div class="text">
-                                            <div class="date">{{ day.0 }}</div>
-                                        </div>
-                                    </div>
-                                </a>
-                            {% else %}
-                                <a class="day_wrap {{day.1}}-display disabled_a" href="">
-                                 <div class="day {{day.1}} current_month">
-                                    <div class="text">
-                                        <div class="date">{{ day.0 }}</div>
-                                    </div>
-                                </div>
-                                </a>
-                            {% endif %}
-                        {% else %}
-                            {% if day.3 in active_days %}
-                                <a class="day_wrap {{day.1}}-display" href="{% url 'calendar_date' year=day.6 month=day.5 day=day.4 %}">
-                                    <div class="day {{day.1}} not_current_month active">
-                                        <div class="text">
-                                            <div class="date">{{ day.0 }}</div>
-                                        </div>
-                                    </div>
-                                </a>
-                            {% else %}
-                                <a class="day_wrap {{day.1}}-display disabled_a" href="">
-                                 <div class="day {{day.1}} not_current_month">
-                                    <div class="text">
-                                        <div class="date">{{ day.0 }}</div>
-                                    </div>
-                                </div>
-                                </a>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                </div>
+            <div class="week">
+                {% for day in week %}
+                {% if day.7 == month_str %}
+                {% if day.3 in active_days %}
+                <a class="day_wrap {{day.1}}-display" href="{% url 'calendar_date' year=day.6 month=day.5 day=day.4 %}">
+                    <div class="day current_month {{day.1}} active">
+                        <div class="text">
+                            <div class="date">{{ day.0 }}</div>
+                            <div class="icons">
+                                <div class="probaterheles {{day.9.hasProject.Próbaterhelés}}"
+                                     data-bubble="{{day.10.Próbaterhelés}}"></div>
+                                <div class="sullyedesmeres {{day.9.hasProject.Süllyedésmérés}}"
+                                     data-bubble="{{day.10.Süllyedésmérés}}"></div>
+                                <div class="integritasvizsgalat {{day.9.hasProject.Integritásvizsgálat}}"
+                                     data-bubble="{{day.10.Integritásvizsgálat}}"></div>
+                                <div class="inklinometer {{day.9.hasProject.Inklinométer}}"
+                                     data-bubble="{{day.10.Inklinométer}}"></div>
+                                <div class="other {{day.9.hasProject.Egyéb}}" data-bubble="{{day.10.Egyéb}}"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </a>
+                {% else %}
+                <a class="day_wrap {{day.1}}-display disabled_a" href="">
+                    <div class="day {{day.1}} current_month">
+                        <div class="text">
+                            <div class="date">{{ day.0 }}</div>
+                            <div class="icons">
+                                <div class="probaterheles {{day.9.hasProject.Próbaterhelés}}"
+                                     data-bubble="{{day.10.Próbaterhelés}}"></div>
+                                <div class="sullyedesmeres {{day.9.hasProject.Süllyedésmérés}}"
+                                     data-bubble="{{day.10.Süllyedésmérés}}"></div>
+                                <div class="integritasvizsgalat {{day.9.hasProject.Integritásvizsgálat}}"
+                                     data-bubble="{{day.10.Integritásvizsgálat}}"></div>
+                                <div class="inklinometer {{day.9.hasProject.Inklinométer}}"
+                                     data-bubble="{{day.10.Inklinométer}}"></div>
+                                <div class="other {{day.9.hasProject.Egyéb}}" data-bubble="{{day.10.Egyéb}}"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </a>
+                {% endif %}
+                {% else %}
+                {% if day.3 in active_days %}
+                <a class="day_wrap {{day.1}}-display" href="{% url 'calendar_date' year=day.6 month=day.5 day=day.4 %}">
+                    <div class="day {{day.1}} not_current_month active">
+                        <div class="text">
+                            <div class="date">{{ day.0 }}</div>
+                            <div class="icons">
+                                <div class="probaterheles {{day.9.hasProject.Próbaterhelés}}"
+                                     data-bubble="{{day.10.Próbaterhelés}}"></div>
+                                <div class="sullyedesmeres {{day.9.hasProject.Süllyedésmérés}}"
+                                     data-bubble="{{day.10.Süllyedésmérés}}"></div>
+                                <div class="integritasvizsgalat {{day.9.hasProject.Integritásvizsgálat}}"
+                                     data-bubble="{{day.10.Integritásvizsgálat}}"></div>
+                                <div class="inklinometer {{day.9.hasProject.Inklinométer}}"
+                                     data-bubble="{{day.10.Inklinométer}}"></div>
+                                <div class="other {{day.9.hasProject.Egyéb}}" data-bubble="{{day.10.Egyéb}}"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </a>
+                {% else %}
+                <a class="day_wrap {{day.1}}-display disabled_a" href="">
+                    <div class="day {{day.1}} not_current_month">
+                        <div class="text">
+                            <div class="date">{{ day.0 }}</div>
+                            <div class="icons">
+                                <div class="probaterheles {{day.9.hasProject.Próbaterhelés}}"
+                                     data-bubble="{{day.10.Próbaterhelés}}"></div>
+                                <div class="sullyedesmeres {{day.9.hasProject.Süllyedésmérés}}"
+                                     data-bubble="{{day.10.Süllyedésmérés}}"></div>
+                                <div class="integritasvizsgalat {{day.9.hasProject.Integritásvizsgálat}}"
+                                     data-bubble="{{day.10.Integritásvizsgálat}}"></div>
+                                <div class="inklinometer {{day.9.hasProject.Inklinométer}}"
+                                     data-bubble="{{day.10.Inklinométer}}"></div>
+                                <div class="other {{day.9.hasProject.Egyéb}}" data-bubble="{{day.10.Egyéb}}"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </a>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
             {% endfor %}
-             <div class="nav_buttons">
-                 <div class="nav_button">
-                     <form method="GET">
-                         <input type="text" name="previous_month" id="previous_month" hidden value="true">
-                         <button class="button-69 backwards"><span>&#10229;</span></button>
-                     </form>
-                 </div>
-                 <div class="nav_button">
-                     <form method="GET">
-                         <input type="text" name="next_month" id="next_month" hidden value="true">
-                         <button class="button-68 forwards"><span>&#10230;</span></button>
-                     </form>
-                 </div>
+            <div class="nav_buttons">
+                <div class="nav_button">
+                    <form method="GET">
+                        <input type="text" name="previous_month" id="previous_month" hidden value="true">
+                        <button class="button-69 backwards"><span>&#10229;</span></button>
+                    </form>
+                </div>
+                <div class="nav_button">
+                    <form method="GET">
+                        <input type="text" name="next_month" id="next_month" hidden value="true">
+                        <button class="button-68 forwards"><span>&#10230;</span></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
