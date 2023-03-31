@@ -88,12 +88,17 @@ def admin(request, year=datetime.date.year, month=datetime.date.month):
                                 day.append({})
 
                             if project.project.hasSubproject():
-                                if project.project.project in day[10].keys():
-                                    day[10][project.project.project].append(
-                                        f"{project.subproject.name} - {len(project.profile.all())} cső")
-                                else:
-                                    day[10].update({project.project.project: [
-                                        f"{project.subproject.name} - {len(project.profile.all())} cső"]})
+                                subprojects = set()
+                                for profile in project.profile.all():
+                                    subprojects.add(profile.artifact.subproject)
+
+                                for subproject in subprojects:
+                                    if project.project.project in day[10].keys():
+                                        day[10][project.project.project].append(
+                                            f"{subproject.name} - {len(project.profile.filter(artifact__subproject=subproject))} cső")
+                                    else:
+                                        day[10].update({project.project.project: [
+                                            f"{subproject.name} - {len(project.profile.filter(artifact__subproject=subproject))} cső"]})
 
                             else:
                                 if project.project.project in day[10].keys():
