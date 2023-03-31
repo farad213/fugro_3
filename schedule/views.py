@@ -718,14 +718,13 @@ def SIT_details(request):
 
 
 def user_selection(request, year=datetime.date.today().year, month=datetime.date.today().month, id=None):
-    print(id)
     if "id" in request.GET.keys():
         if "Admin" in request.GET["id"]:
             return HttpResponse(reverse("admin", args=[year, month]))
         else:
             id = request.GET["id"]
     user = User.objects.get(pk=int(id))
-
+    print(f"{request.user} used user selection for {user} user")
     cal = get_calendar(year, month)
 
     active_days = []
