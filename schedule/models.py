@@ -6,7 +6,7 @@ from functools import partial
 class Vehicle(models.Model):
     license_plate = models.CharField(max_length=20, verbose_name="Rendszám")
     vehicle_name = models.CharField(max_length=30, verbose_name="Autó neve")
-    archived = models.DateField(verbose_name="Archiválva", null=True)
+    archived = models.DateField(verbose_name="Archiválva", null=True, blank=True)
 
     class Meta:
         verbose_name = "Jármű"
@@ -114,10 +114,10 @@ class DateBoundWithProject(models.Model):
         return f'{self.date} {self.project}'
 
 class SIT_project(models.Model):
-    project_no = models.CharField(max_length=30)
-    customer = models.CharField(max_length=50)
-    contract = models.IntegerField()
-    location = models.CharField(max_length=100)
+    project_no = models.CharField(max_length=30, verbose_name="Iktatószám")
+    customer = models.CharField(max_length=50 ,verbose_name="Megrendelő")
+    contract = models.IntegerField(verbose_name="Szerződés éve")
+    location = models.CharField(max_length=100, verbose_name="Helyszín")
 
     class Meta:
         verbose_name = "SIT iktatószám"
