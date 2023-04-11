@@ -11,8 +11,8 @@ class Length_form(forms.Form):
 
 
 class Buildings_form(forms.Form):
-    sorszam = forms.CharField(max_length=10, required=False)
-    building = forms.ChoiceField(choices=[("TMO", "TMO"), ("TKB", "TKB"), ("TU", "TU"), ("TEM", "TEM")], widget=forms.RadioSelect)
+    sorszam = forms.IntegerField(required=False)
+    building = forms.ChoiceField(choices=[("TMO", "TMO"), ("TKB", "TKB"), ("TU", "TU"), ("TEM", "TEM"), ("MLC", "MLC")], widget=forms.RadioSelect)
 
     sorszam.widget.attrs = {"class": "sorszam", "id": "sorszam", "placeholder": "Sorszám", "autocomplete": "off"}
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import Length_form, Buildings_form, QuickReportForm
-from .models import JelkodVVS, JelkodCCS, Technician, Customer, BuildingsTU, BuildingsTMO, BuildingsTEM, BuildingsTKB
+from .models import JelkodVVS, JelkodCCS, Technician, Customer, BuildingsTU, BuildingsTMO, BuildingsTEM, BuildingsTKB, \
+    BuildingsMLC
 from django.contrib.auth.decorators import user_passes_test, login_required
 import datetime, shutil, os
 from docxtpl import DocxTemplate, InlineImage
@@ -82,10 +83,10 @@ def buildings_ajax(request):
         return_str = "Hiányzó sorszám"
     return render(request, "bmw/ajax/buildings.html", {"result": return_str})
 
+
 @login_required
 @user_passes_test(BMW_group_check)
 def quickreport(request):
-
     form = QuickReportForm()
     context = {"form": form}
     if request.method == "GET":
@@ -199,7 +200,5 @@ def quickreport(request):
                 response = FileResponse(file)
                 response['Content-Disposition'] = f'attachment; filename="{file_name}.docx"'
                 return response
-
-
 
     return render(request, "bmw/quickreport.html", context)
