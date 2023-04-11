@@ -19,12 +19,13 @@ Fugro - Épületek
                 {{ field }}
             </div>
             {% endfor %}
-
-            {% for field in form.building %}
             <div class="radio_buttons">
+                {% for field in form.building %}
+
                 {{ field }}
+
+                {% endfor %}
             </div>
-            {% endfor %}
             <button type="submit" class="btn button-37" id="calculate">Számol</button>
         </form>
     </div>

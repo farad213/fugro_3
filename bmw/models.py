@@ -28,6 +28,15 @@ class BuildingsTEM(models.Model):
     def __str__(self):
         return f"TEM - {self.sorszam} - {self.szerkezeti_hossz}"
 
+
+class BuildingsMLC(models.Model):
+    sorszam = models.IntegerField()
+    szerkezeti_hossz = models.FloatField()
+
+    def __str__(self):
+        return f"MLC - {self.sorszam} - {self.szerkezeti_hossz}"
+
+
 class JelkodCCS(models.Model):
     notation = models.CharField(max_length=5)
     length = models.FloatField()
