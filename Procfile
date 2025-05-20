@@ -1,1 +1,1 @@
-web: gunicorn fugro.wsgi
+web: gunicorn fugro.wsgi --timeout 120
